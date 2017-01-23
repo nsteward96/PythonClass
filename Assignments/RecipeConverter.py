@@ -3,13 +3,11 @@
 
 import math
 
-# User inputs original recipe.
-print "-- Original Recipe --"
-
 # While the user hasn't finished the input process without making a mistake
 while True:
-    # Inputting process
+    # Inputting process, user inputs original recipe
     try:
+        print "-- Original Recipe --"
         print "Enter the amount of Flour (cups):",
         flour_cups = float(raw_input())
         print "Enter the amount of water (cups):",
@@ -20,9 +18,13 @@ while True:
         yeast_teaspoons = float(raw_input())
         print "Enter the loaf adjustment factor (e.g. 2.0 double the size):",
         loaf_adjustment_factor = float(raw_input())
-    # If the user messes up, they must start over.
+    # If an error occurs, the user must start over.
+    except ValueError:
+        print "A valid number or float was not entered. Let's take it from the top..."
+        print
     except Exception:
-        print "Please enter a valid number or float. Let's take it from the top..."
+        print "Oh no, something bad happened and I don't know what it was! Maybe we just need to go back..."
+        print
     # If the user doesn't mess up, they move on to the next section.
     else:
         break
