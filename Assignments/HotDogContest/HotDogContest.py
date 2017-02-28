@@ -106,7 +106,7 @@ def declareVictor(contestants, betTarget, bet):
             print "\nIt's a tie! You got your money back!\n"
             return 0
         else:
-            print "\nWell hot dog, you're the Hot Dog champion!"
+            print "\nWell hot dog, you're the Hot Dog champion! ", 
             print "You won %i cash!\n" % bet
             return bet
 
