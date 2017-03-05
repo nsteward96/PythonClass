@@ -22,7 +22,8 @@ def main():
         betTarget = getBetTarget()
         bet = setBet(cash)
         contestants = runCompetition(contestants)
-        cash += declareVictor(contestants, betTarget, bet)
+        won = determineVictor(contestants, betTarget)
+        cash += declareVictor(won, bet)
     print "You're all out of money!!! Come back when you have some more!"
 
 ################################################################################
@@ -72,8 +73,9 @@ def setBet(cash):
 ################################################################################
 def runCompetition(contestants):
     mostHotdogsEaten = 0
+    competitionOver = False
     print "Ready, set, eat!"
-    while mostHotdogsEaten < 50:
+    while mostHotdogsEaten < 50 or competitionOver == False:
         print "\nchomp...  chomp...  chomp...\n"
         for contestant in contestants:
             contestants[contestant] += random.randrange(1, 6)
@@ -81,33 +83,45 @@ def runCompetition(contestants):
                 mostHotdogsEaten = contestants[contestant]
             print "%s has eaten %i hot dogs!" % (contestant, contestants[contestant])
         time.sleep(1)
+        if mostHotdogsEaten >= 50:
+            numberOfWinners = 0
+            for contestant in contestants:
+                if contestants[contestant] == mostHotdogsEaten:
+                    numberOfWinners += 1
+            if numberOfWinners == 1:
+                competitionOver = True
     return contestants
 
 ################################################################################
+#  -Function determineVictor(Dictionary contestants)  
+#  -Searches through the dictionary of contestants to find the winner.
+#  -Returns True if the betted contestant won, false if they lost.
+################################################################################
+def determineVictor(contestants, betTarget):
+    mostHotDogs = 0
+    for contestant in contestants:
+        if contestants[contestant] > mostHotDogs:
+            mostHotDogs = contestants[contestant]
+    if mostHotDogs == contestants[betTarget]:
+        return True
+    else:
+        return False
+    
+################################################################################
 #  -Function declareVictor(Dictionary contestants, String betTarget, int bet)  
 #  -Inspects each contestant's victory conditions:
-#       - If the contestant isn't in a winning condition, he loses.
-#       - If the contestant is in the winning condition...
-#           - ... if there is no other person in a winning condition, they win.
-#           - ... if there is another person in a winning condition, it's a tie.
+#       - If the contestant isn't in a winning condition, they lose.
+#       - If the contestant is in the winning condition, they win.
 #  -Returns the amount of money the user won (or lost)
 ################################################################################
-def declareVictor(contestants, betTarget, bet):
-    if contestants[betTarget] < 50:
+def declareVictor(won, bet):
+    if won == False:
         print "\nOh no, you aren't top dog! ",
         print "Maybe you should train harder! You lost %i cash.\n" % bet
         return -bet
-    elif contestants[betTarget] >= 50:
-        tie = False
-        for contestant in contestants:
-            if contestants[contestant] >= 50 and contestant != betTarget:
-                tie = True
-        if tie:
-            print "\nIt's a tie! You got your money back!\n"
-            return 0
-        else:
-            print "\nWell hot dog, you're the Hot Dog champion! ", 
-            print "You won %i cash!\n" % bet
-            return bet
+    elif won == True:
+        print "\nWell hot dog, you're the Hot Dog champion! ", 
+        print "You won %i cash!\n" % bet
+        return bet
 
 main()
