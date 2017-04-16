@@ -70,11 +70,11 @@ def search(userSearch, userSearchType, json):
     if userSearchType == "C":
         for item in json:
             if unicode.upper(item["Category"]) == str.upper(userSearch):
-                finalResults = finalResults + format("%s - %s\n" % (str(item["Product"]), str(item["Price"])))
+                finalResults = finalResults + format("%s - $%s\n" % (str(item["Product"]), str(item["Price"])))
     elif userSearchType == "K":
         for item in json:
             if str.upper(userSearch) in str(unicode.upper(item["Product"])):
-                finalResults = finalResults + format("%s - %s\n" % (str(item["Product"]), str(item["Price"])))
+                finalResults = finalResults + format("%s - $%s\n" % (str(item["Product"]), str(item["Price"])))
     if finalResults == "":
         print "0 results for your search. Please try again!"
     else:
