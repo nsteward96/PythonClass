@@ -19,10 +19,15 @@ import json
 #   - Searches the storeContents json for products that match the search.
 ################################################################################
 def main():
-    storeContents = processJson()
-    userSearchType = str.upper(Epic.userString("Search by category (c) or keyword (k)? "))
-    userSearch = processRequest(str.capitalize(userSearchType))
-    search(userSearch, userSearchType, storeContents)
+    running = True
+    while running:
+        storeContents = processJson()
+        userSearchType = ""
+        while str.upper(userSearchType) != "C" and str.upper(userSearchType) != "K":
+            userSearchType = str.upper(Epic.userString("Search by category (c) or keyword (k)? "))
+        userSearch = processRequest(str.capitalize(userSearchType))
+        search(userSearch, userSearchType, storeContents)
+        running = promptUserRunAgain()
 
 ################################################################################
 #   processJson()
@@ -70,7 +75,25 @@ def search(userSearch, userSearchType, json):
         for item in json:
             if str.upper(userSearch) in str(unicode.upper(item["Product"])):
                 finalResults = finalResults + format("%s - %s\n" % (str(item["Product"]), str(item["Price"])))
-    print finalResults
+    if finalResults == "":
+        print "0 results for your search. Please try again!"
+    else:
+        print finalResults
+
+################################################################################
+#   promptUserRunAgain()
+#   - No arguments, returns a boolean
+#   - Asks the user if they would like to make another search.
+#   - If True is returned, the program keeps running.
+#   - If False is returned, the program ends.
+################################################################################
+def promptUserRunAgain():
+    runAgain = ""
+    while str.upper(runAgain) != "Y" and str.upper(runAgain) != "N":
+        runAgain = Epic.userString("Would you like to run again? ('Y' or 'N'): ")
+    if str.upper(runAgain) == "N":
+        return False
+    return True
 
 ################################################################################
 #   Run the main program
